@@ -12,13 +12,13 @@ CORS(app)
 # Load the trained model
 model = joblib.load('HousePrediction.joblib')
 
-# MongoDB connection
+# MongoDB connection (secure for Render via environment variable)
 MONGO_URI = os.environ.get('MONGO_URI') or "mongodb+srv://agarwalsurbhi1610:suRprO%40709@ml-cluster.tl8llhr.mongodb.net/?retryWrites=true&w=majority&appName=ml-cluster"
 client = MongoClient(MONGO_URI)
-db = client['ml_project']  # your database name
-collection = db['predictions']  # your collection name
+db = client['ml_project']  # Database name
+collection = db['predictions']  # Collection name
 
-# 👋 Home route to confirm server is running
+# 👋 Home route to confirm the server is up
 @app.route('/')
 def home():
     return '✅ House Price Prediction API with MongoDB is Running!'
@@ -50,13 +50,14 @@ def predict():
         }
         collection.insert_one(record)
 
-        # Return response
+        # Return prediction
         return jsonify({'predicted_price': round(prediction, 2)})
-    
+
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 # 🚀 Run the app
 if __name__ == '__main__':
-    print("🚀 Flask API with MongoDB is starting...")
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
