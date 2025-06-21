@@ -14,7 +14,7 @@ model = joblib.load('HousePrediction.joblib')
 
 # MongoDB connection (secure for Render via environment variable)
 MONGO_URI = os.environ.get('MONGO_URI') or "mongodb+srv://agarwalsurbhi1610:suRprO%40709@ml-cluster.tl8llhr.mongodb.net/?retryWrites=true&w=majority&appName=ml-cluster"
-client = MongoClient(MONGO_URI , tls=True)
+client = MongoClient(MONGO_URI , tls=True , tlsAllowInvalidCertificates=True)
 db = client['ml_project']  # Database name
 collection = db['predictions']  # Collection name
 
