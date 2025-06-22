@@ -6,7 +6,6 @@ from pymongo import MongoClient
 import os
 from datetime import datetime
 
-
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
@@ -14,13 +13,13 @@ CORS(app)
 # Load the trained model
 model = joblib.load('HousePrediction.joblib')
 
-# MongoDB connection (secure for Render via environment variable)
-MONGO_URI = os.environ.get('MONGO_URI') or "mongodb+srv://agarwalsurbhi1610:suRprO%40709@ml-cluster.tl8llhr.mongodb.net/?retryWrites=true&w=majority&appName=ml-cluster"
+# MongoDB connection
+MONGO_URI = os.environ.get('MONGO_URI') or "mongodb+srv://agarwalsurbhi1610:suRprO%40709@ml-cluster.tl8llhr.mongodb.net/ml_project?retryWrites=true&w=majority"
 client = MongoClient(MONGO_URI, tls=True, tlsCAFile=certifi.where())
 db = client['ml_project']  # Database name
 collection = db['predictions']  # Collection name
 
-# 👋 Home route to confirm the server is up
+# 👋 Home route
 @app.route('/')
 def home():
     return '✅ House Price Prediction API with MongoDB is Running!'
@@ -60,6 +59,5 @@ def predict():
 
 # 🚀 Run the app
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=10000, debug=True)
+    app.run(host='0.0.0.0', port=port)
