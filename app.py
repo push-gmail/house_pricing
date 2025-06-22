@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
+import certifi
 from pymongo import MongoClient
 import os
 from datetime import datetime
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -14,7 +16,7 @@ model = joblib.load('HousePrediction.joblib')
 
 # MongoDB connection (secure for Render via environment variable)
 MONGO_URI = os.environ.get('MONGO_URI') or "mongodb+srv://agarwalsurbhi1610:suRprO%40709@ml-cluster.tl8llhr.mongodb.net/?retryWrites=true&w=majority&appName=ml-cluster"
-client = MongoClient(MONGO_URI, tls=True, tlsAllowInvalidCertificates=True)
+client = MongoClient(MONGO_URI, tls=True, tlsCAFile=certifi.where())
 db = client['ml_project']  # Database name
 collection = db['predictions']  # Collection name
 
